@@ -12,28 +12,23 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const dotenv_1 = __importDefault(require("dotenv"));
-const express_1 = __importDefault(require("express"));
-const http_1 = __importDefault(require("http"));
-const mongoose_1 = __importDefault(require("mongoose"));
-const cors_1 = __importDefault(require("cors"));
-const auth_1 = require("./routes/auth");
-dotenv_1.default.config();
-const app = (0, express_1.default)();
-const server = http_1.default.createServer(app);
-app.use(express_1.default.json());
-app.use((0, cors_1.default)());
-app.use('/', auth_1.authRoutes);
-mongoose_1.default.set('strictQuery', false);
-(() => __awaiter(void 0, void 0, void 0, function* () {
+const User = require('../models/userModel');
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const requireAuth = (request, response, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { authorization } = request.headers;
+    if (!authorization) {
+        return response.status(401).json({ error: 'Authorization token required' });
+    }
+    const token = authorization.split(' ')[1];
     try {
-        yield mongoose_1.default.connect(process.env.MONGO_URI);
-        server.listen(process.env.PORT || 4000, function () {
-            console.log('connected to DB');
-        });
+        const { _id } = jsonwebtoken_1.default.verify(token, process.env.SECRET);
+        request.user = yield User.findOne({ _id }).select('_id');
+        next();
     }
     catch (error) {
         console.log(error);
+        response.status(404).json({ error: 'Request is not authorized' });
     }
-}))();
-//# sourceMappingURL=index.js.map
+});
+module.exports = requireAuth;
+//# sourceMappingURL=requireAuth.js.map

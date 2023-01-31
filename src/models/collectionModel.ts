@@ -5,7 +5,6 @@ const collectionSchema = new Schema({
   title: String,
   description: String,
   topic: String,
-  image: Boolean,
   items: [Items],
 });
 

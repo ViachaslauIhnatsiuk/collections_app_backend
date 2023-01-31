@@ -1,7 +1,27 @@
-const Collection = require('../models/collectionsModel');
 import { Schema, model } from 'mongoose';
 import bcrypt from 'bcrypt';
 import validator from 'validator';
+
+const commentSchema = new Schema(
+  { user: String, text: String, date: String },
+  { timestamps: true }
+);
+
+const itemSchema = new Schema({
+  id: String,
+  title: String,
+  tags: [String],
+  collectionName: String,
+  user: Boolean,
+  comments: [commentSchema],
+});
+
+const collectionSchema = new Schema({
+  title: String,
+  description: String,
+  topic: String,
+  items: [itemSchema],
+});
 
 const userSchema = new Schema(
   {
@@ -22,7 +42,7 @@ const userSchema = new Schema(
     isAdmin: Boolean,
     language: String,
     theme: String,
-    collections: [Collection],
+    collections: [collectionSchema],
   },
   { timestamps: true }
 );

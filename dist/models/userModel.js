@@ -15,21 +15,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = require("mongoose");
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const validator_1 = __importDefault(require("validator"));
-const commentSchema = new mongoose_1.Schema({ user: String, text: String, date: String }, { timestamps: true });
-const itemSchema = new mongoose_1.Schema({
-    id: String,
-    title: String,
-    tags: [String],
-    collectionName: String,
-    user: Boolean,
-    comments: [commentSchema],
-});
-const collectionSchema = new mongoose_1.Schema({
-    title: String,
-    description: String,
-    topic: String,
-    items: [itemSchema],
-});
 const userSchema = new mongoose_1.Schema({
     name: {
         type: String,
@@ -48,9 +33,8 @@ const userSchema = new mongoose_1.Schema({
     isAdmin: Boolean,
     language: String,
     theme: String,
-    collections: [collectionSchema],
-}, { timestamps: true });
-userSchema.statics.signup = function (name, email, password, isBlocked = false, language = 'EN', theme = 'light', collections) {
+}, { versionKey: false });
+userSchema.statics.signup = function (name, email, password, isBlocked = false, language = 'EN', theme = 'light') {
     return __awaiter(this, void 0, void 0, function* () {
         if (!name || !email || !password) {
             throw Error('All fields must be filled');
@@ -71,7 +55,6 @@ userSchema.statics.signup = function (name, email, password, isBlocked = false, 
             isBlocked,
             language,
             theme,
-            collections,
         });
         return user;
     });

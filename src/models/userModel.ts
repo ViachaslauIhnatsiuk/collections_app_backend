@@ -2,27 +2,6 @@ import { Schema, model } from 'mongoose';
 import bcrypt from 'bcrypt';
 import validator from 'validator';
 
-const commentSchema = new Schema(
-  { user: String, text: String, date: String },
-  { timestamps: true }
-);
-
-const itemSchema = new Schema({
-  id: String,
-  title: String,
-  tags: [String],
-  collectionName: String,
-  user: Boolean,
-  comments: [commentSchema],
-});
-
-const collectionSchema = new Schema({
-  title: String,
-  description: String,
-  topic: String,
-  items: [itemSchema],
-});
-
 const userSchema = new Schema(
   {
     name: {
@@ -42,9 +21,8 @@ const userSchema = new Schema(
     isAdmin: Boolean,
     language: String,
     theme: String,
-    collections: [collectionSchema],
   },
-  { timestamps: true }
+  { versionKey: false }
 );
 
 userSchema.statics.signup = async function (
@@ -53,8 +31,7 @@ userSchema.statics.signup = async function (
   password: string,
   isBlocked: boolean = false,
   language: string = 'EN',
-  theme: string = 'light',
-  collections: []
+  theme: string = 'light'
 ) {
   if (!name || !email || !password) {
     throw Error('All fields must be filled');
@@ -80,7 +57,6 @@ userSchema.statics.signup = async function (
     isBlocked,
     language,
     theme,
-    collections,
   });
 
   return user;

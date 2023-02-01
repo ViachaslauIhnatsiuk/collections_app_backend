@@ -30,6 +30,7 @@ userSchema.statics.signup = async function (
   email: string,
   password: string,
   isBlocked: boolean = false,
+  isAdmin: boolean = false,
   language: string = 'EN',
   theme: string = 'light'
 ) {
@@ -55,6 +56,7 @@ userSchema.statics.signup = async function (
     email,
     password: hash,
     isBlocked,
+    isAdmin,
     language,
     theme,
   });

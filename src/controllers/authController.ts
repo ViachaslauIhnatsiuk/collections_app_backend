@@ -13,7 +13,18 @@ const signUp = async (request: Request, response: Response): Promise<void> => {
     const user = await User.signup(name, email, password);
     const token = createToken(user._id);
 
-    response.status(200).json({ email, token });
+    const responseUser = {
+      id: user._id,
+      token,
+      name,
+      email,
+      isBlocked: user.isBlocked,
+      isAdmin: user.isAdmin,
+      language: user.language,
+      theme: user.theme,
+    };
+
+    response.status(200).json(responseUser);
   } catch (error) {
     response.status(400).json({ error: error.message });
   }
@@ -26,7 +37,18 @@ const signIn = async (request: Request, response: Response): Promise<void> => {
     const user = await User.signin(email, password);
     const token = createToken(user._id);
 
-    response.status(200).json({ email, id: user._id, token });
+    const responseUser = {
+      id: user._id,
+      token,
+      name: user.name,
+      email,
+      isBlocked: user.isBlocked,
+      isAdmin: user.isAdmin,
+      language: user.language,
+      theme: user.theme,
+    };
+
+    response.status(200).json(responseUser);
   } catch (error) {
     response.status(400).json({ error: error.message });
   }

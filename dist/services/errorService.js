@@ -7,7 +7,7 @@ const createError = (statusCode, message) => {
 exports.createError = createError;
 const checkRequestBody = (body, keys) => {
     const requestBodyKeys = Object.keys(body);
-    if (!requestBodyKeys.length) {
+    if (requestBodyKeys.length === 0) {
         return 'request body is required';
     }
     for (const key of keys) {

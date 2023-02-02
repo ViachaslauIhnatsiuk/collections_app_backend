@@ -44,7 +44,7 @@ const getCollections = async (_: Request, response: Response) => {
 
 const getCollectionById = async (request: Request, response: Response) => {
   try {
-    const collection = await collectionService.deleteCollectionById(
+    const collection = await collectionService.findCollectionById(
       request.params['collectionId']
     );
 

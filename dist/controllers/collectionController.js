@@ -74,7 +74,7 @@ const getCollections = (_, response) => __awaiter(void 0, void 0, void 0, functi
 exports.getCollections = getCollections;
 const getCollectionById = (request, response) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const collection = yield collectionService.deleteCollectionById(request.params['collectionId']);
+        const collection = yield collectionService.findCollectionById(request.params['collectionId']);
         response.json(collection);
     }
     catch (error) {

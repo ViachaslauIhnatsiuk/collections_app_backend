@@ -32,86 +32,98 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteCollection = exports.updateCollection = exports.getCollectionById = exports.getCollections = exports.createCollection = void 0;
-const collectionService = __importStar(require("../services/collectionService"));
+exports.deleteItem = exports.updateItem = exports.getItemById = exports.getItems = exports.createItem = void 0;
+const itemService = __importStar(require("../services/itemService"));
 const errorService_1 = require("../services/errorService");
-const createCollection = (request, response) => __awaiter(void 0, void 0, void 0, function* () {
+const createItem = (request, response) => __awaiter(void 0, void 0, void 0, function* () {
+    const itemId = request.baseUrl.split('/')[2];
     const bodyRequestError = (0, errorService_1.checkRequestBody)(request.body, [
         'title',
-        'description',
-        'topic',
+        'tags',
+        'collectionId',
         'ownerId',
+        'comments',
     ]);
     if (bodyRequestError) {
         return response
             .status(400)
             .send((0, errorService_1.createError)(400, 'bad request: ' + bodyRequestError));
     }
-    const { title, description, topic, ownerId } = request.body;
+    const { title, tags, collectionId, ownerId, comments } = request.body;
     try {
-        const newCollection = yield collectionService.createCollection({
+        const newItem = yield itemService.createItem({
             title,
-            description,
-            topic,
+            tags,
+            collectionId,
             ownerId,
+            comments,
+            itemId,
         });
-        response.json(newCollection);
-    }
-    catch (error) {
-        return console.log(error);
-    }
-});
-exports.createCollection = createCollection;
-const getCollections = (_, response) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const collections = yield collectionService.findCollections();
-        response.json(collections);
+        response.json(newItem);
     }
     catch (error) {
         console.log(error);
     }
 });
-exports.getCollections = getCollections;
-const getCollectionById = (request, response) => __awaiter(void 0, void 0, void 0, function* () {
+exports.createItem = createItem;
+const getItems = (request, response) => __awaiter(void 0, void 0, void 0, function* () {
+    const itemId = request.baseUrl.split('/')[2];
     try {
-        const collection = yield collectionService.deleteCollectionById(request.params['collectionId']);
-        response.json(collection);
+        const items = yield itemService.findItems({ itemId });
+        response.json(items);
     }
     catch (error) {
-        return response.status(404).send((0, errorService_1.createError)(404, 'Collection not found!'));
+        console.log(error);
     }
 });
-exports.getCollectionById = getCollectionById;
-const updateCollection = (request, response) => __awaiter(void 0, void 0, void 0, function* () {
+exports.getItems = getItems;
+const getItemById = (request, response) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const item = yield itemService.findItemById(request.params['itemId']);
+        response.json(item);
+    }
+    catch (error) {
+        return response.status(404).send((0, errorService_1.createError)(404, 'Item not found!'));
+    }
+});
+exports.getItemById = getItemById;
+const updateItem = (request, response) => __awaiter(void 0, void 0, void 0, function* () {
     const bodyRequestError = (0, errorService_1.checkRequestBody)(request.body, [
         'title',
-        'description',
-        'topic',
+        'tags',
+        'collectionId',
         'ownerId',
+        'comments',
     ]);
     if (bodyRequestError) {
         return response
             .status(400)
             .send((0, errorService_1.createError)(400, 'bad request: ' + bodyRequestError));
     }
-    const { title, description, topic, ownerId } = request.body;
+    const { title, tags, collectionId, ownerId, comments } = request.body;
     try {
-        const updatedCollection = yield collectionService.updateCollection(request.params['collectionId'], { title, description, topic, ownerId });
-        response.json(updatedCollection);
+        const updatedItem = yield itemService.updateItem(request.params['itemId'], {
+            title,
+            tags,
+            collectionId,
+            ownerId,
+            comments,
+        });
+        response.json(updatedItem);
     }
     catch (error) {
         console.log(error);
     }
 });
-exports.updateCollection = updateCollection;
-const deleteCollection = (request, response) => __awaiter(void 0, void 0, void 0, function* () {
+exports.updateItem = updateItem;
+const deleteItem = (request, response) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const deletedCollection = yield collectionService.deleteCollectionById(request.params['collectionId']);
-        response.json(deletedCollection);
+        const deletedItem = yield itemService.deleteItemById(request.params['itemId']);
+        response.json(deletedItem);
     }
     catch (error) {
         console.log(error);
     }
 });
-exports.deleteCollection = deleteCollection;
-//# sourceMappingURL=collectionController.js.map
+exports.deleteItem = deleteItem;
+//# sourceMappingURL=itemController.js.map

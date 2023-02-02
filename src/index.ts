@@ -5,6 +5,7 @@ import mongoose from 'mongoose';
 import cors from 'cors';
 import { authRoutes } from './routes/auth';
 import { collectionsRouter } from './routes/collections';
+import { itemsRouter } from './routes/items';
 
 dotenv.config();
 const app = express();
@@ -15,6 +16,7 @@ app.use(cors());
 
 app.use('/', authRoutes);
 app.use('/collections', collectionsRouter);
+app.use('/items', itemsRouter);
 
 mongoose.set('strictQuery', false);
 

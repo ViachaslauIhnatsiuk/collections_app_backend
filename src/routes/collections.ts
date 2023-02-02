@@ -1,13 +1,16 @@
 import { Router } from 'express';
 import * as collectionController from '../controllers/collectionController';
+import { itemsRouter } from './items';
 
 const collectionsRouter = Router();
+
+collectionsRouter.use('/:collectionId/items', itemsRouter);
+
+collectionsRouter.post('/', collectionController.createCollection);
 
 collectionsRouter.get('/', collectionController.getCollections);
 
 collectionsRouter.get('/:collectionId', collectionController.getCollectionById);
-
-collectionsRouter.post('/', collectionController.createCollection);
 
 collectionsRouter.put('/:collectionId', collectionController.updateCollection);
 

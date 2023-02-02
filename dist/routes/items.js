@@ -23,16 +23,14 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.collectionsRouter = void 0;
+exports.itemsRouter = void 0;
 const express_1 = require("express");
-const collectionController = __importStar(require("../controllers/collectionController"));
-const items_1 = require("./items");
-const collectionsRouter = (0, express_1.Router)();
-exports.collectionsRouter = collectionsRouter;
-collectionsRouter.use('/:collectionId/items', items_1.itemsRouter);
-collectionsRouter.post('/', collectionController.createCollection);
-collectionsRouter.get('/', collectionController.getCollections);
-collectionsRouter.get('/:collectionId', collectionController.getCollectionById);
-collectionsRouter.put('/:collectionId', collectionController.updateCollection);
-collectionsRouter.delete('/:collectionId', collectionController.deleteCollection);
-//# sourceMappingURL=collections.js.map
+const itemController = __importStar(require("../controllers/itemController"));
+const itemsRouter = (0, express_1.Router)();
+exports.itemsRouter = itemsRouter;
+itemsRouter.post('/', itemController.createItem);
+itemsRouter.get('/', itemController.getItems);
+itemsRouter.get('/:itemId', itemController.getItemById);
+itemsRouter.put('/:itemId', itemController.updateItem);
+itemsRouter.delete('/:itemId', itemController.deleteItem);
+//# sourceMappingURL=items.js.map

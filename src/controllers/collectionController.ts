@@ -44,11 +44,11 @@ const getCollections = async (_: Request, response: Response) => {
 
 const getCollectionById = async (request: Request, response: Response) => {
   try {
-    const collections = await collectionService.deleteCollectionById(
+    const collection = await collectionService.deleteCollectionById(
       request.params['collectionId']
     );
 
-    response.json(collections);
+    response.json(collection);
   } catch (error) {
     return response.status(404).send(createError(404, 'Collection not found!'));
   }

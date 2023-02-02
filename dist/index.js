@@ -20,6 +20,7 @@ const cors_1 = __importDefault(require("cors"));
 const auth_1 = require("./routes/auth");
 const collections_1 = require("./routes/collections");
 const items_1 = require("./routes/items");
+const users_1 = require("./routes/users");
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 const server = http_1.default.createServer(app);
@@ -28,6 +29,7 @@ app.use((0, cors_1.default)());
 app.use('/', auth_1.authRoutes);
 app.use('/collections', collections_1.collectionsRouter);
 app.use('/items', items_1.itemsRouter);
+app.use('/users', users_1.usersRouter);
 mongoose_1.default.set('strictQuery', false);
 (() => __awaiter(void 0, void 0, void 0, function* () {
     try {

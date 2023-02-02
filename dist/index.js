@@ -18,12 +18,14 @@ const http_1 = __importDefault(require("http"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const cors_1 = __importDefault(require("cors"));
 const auth_1 = require("./routes/auth");
+const collections_1 = require("./routes/collections");
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 const server = http_1.default.createServer(app);
 app.use(express_1.default.json());
 app.use((0, cors_1.default)());
 app.use('/', auth_1.authRoutes);
+app.use('/collections', collections_1.collectionsRouter);
 mongoose_1.default.set('strictQuery', false);
 (() => __awaiter(void 0, void 0, void 0, function* () {
     try {

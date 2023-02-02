@@ -4,6 +4,7 @@ import http from 'http';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import { authRoutes } from './routes/auth';
+import { collectionsRouter } from './routes/collections';
 
 dotenv.config();
 const app = express();
@@ -13,6 +14,7 @@ app.use(express.json());
 app.use(cors());
 
 app.use('/', authRoutes);
+app.use('/collections', collectionsRouter);
 
 mongoose.set('strictQuery', false);
 

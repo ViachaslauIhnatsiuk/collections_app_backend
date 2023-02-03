@@ -36,29 +36,8 @@ exports.deleteItem = exports.updateItem = exports.getItemById = exports.getItems
 const itemService = __importStar(require("../services/itemService"));
 const errorService_1 = require("../services/errorService");
 const createItem = (request, response) => __awaiter(void 0, void 0, void 0, function* () {
-    const itemId = request.baseUrl.split('/')[2];
-    const bodyRequestError = (0, errorService_1.checkRequestBody)(request.body, [
-        'title',
-        'tags',
-        'collectionId',
-        'ownerId',
-        'comments',
-    ]);
-    if (bodyRequestError) {
-        return response
-            .status(400)
-            .send((0, errorService_1.createError)(400, 'bad request: ' + bodyRequestError));
-    }
-    const { title, tags, collectionId, ownerId, comments } = request.body;
     try {
-        const newItem = yield itemService.createItem({
-            title,
-            tags,
-            collectionId,
-            ownerId,
-            comments,
-            itemId,
-        });
+        const newItem = yield itemService.createItem(Object.assign({}, request.body));
         response.json(newItem);
     }
     catch (error) {
@@ -88,27 +67,8 @@ const getItemById = (request, response) => __awaiter(void 0, void 0, void 0, fun
 });
 exports.getItemById = getItemById;
 const updateItem = (request, response) => __awaiter(void 0, void 0, void 0, function* () {
-    const bodyRequestError = (0, errorService_1.checkRequestBody)(request.body, [
-        'title',
-        'tags',
-        'collectionId',
-        'ownerId',
-        'comments',
-    ]);
-    if (bodyRequestError) {
-        return response
-            .status(400)
-            .send((0, errorService_1.createError)(400, 'bad request: ' + bodyRequestError));
-    }
-    const { title, tags, collectionId, ownerId, comments } = request.body;
     try {
-        const updatedItem = yield itemService.updateItem(request.params['itemId'], {
-            title,
-            tags,
-            collectionId,
-            ownerId,
-            comments,
-        });
+        const updatedItem = yield itemService.updateItem(request.params['itemId'], Object.assign({}, request.body));
         response.json(updatedItem);
     }
     catch (error) {

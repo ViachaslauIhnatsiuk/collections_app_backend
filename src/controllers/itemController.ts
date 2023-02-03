@@ -1,34 +1,13 @@
 import { Response, Request } from 'express';
 import * as itemService from '../services/itemService';
-import { createError, checkRequestBody } from '../services/errorService';
+import { createError } from '../services/errorService';
 
 const createItem = async (request: Request, response: Response) => {
-  const itemId = request.baseUrl.split('/')[2];
-  const bodyRequestError = checkRequestBody(request.body, [
-    'title',
-    'tags',
-    'collectionId',
-    'ownerId',
-    'comments',
-  ]);
-
-  if (bodyRequestError) {
-    return response
-      .status(400)
-      .send(createError(400, 'bad request: ' + bodyRequestError));
-  }
-
-  const { title, tags, collectionId, ownerId, comments } = request.body;
-
   try {
     const newItem = await itemService.createItem({
-      title,
-      tags,
-      collectionId,
-      ownerId,
-      comments,
-      itemId,
+      ...request.body,
     });
+
     response.json(newItem);
   } catch (error) {
     console.log(error);
@@ -58,29 +37,9 @@ const getItemById = async (request: Request, response: Response) => {
 };
 
 const updateItem = async (request: Request, response: Response) => {
-  const bodyRequestError = checkRequestBody(request.body, [
-    'title',
-    'tags',
-    'collectionId',
-    'ownerId',
-    'comments',
-  ]);
-
-  if (bodyRequestError) {
-    return response
-      .status(400)
-      .send(createError(400, 'bad request: ' + bodyRequestError));
-  }
-
-  const { title, tags, collectionId, ownerId, comments } = request.body;
-
   try {
     const updatedItem = await itemService.updateItem(request.params['itemId'], {
-      title,
-      tags,
-      collectionId,
-      ownerId,
-      comments,
+      ...request.body,
     });
 
     response.json(updatedItem);

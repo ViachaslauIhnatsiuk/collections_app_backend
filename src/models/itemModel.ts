@@ -22,7 +22,7 @@ const itemSchema = new Schema(
     },
     comments: [commentSchema],
   },
-  { versionKey: false }
+  { versionKey: false, strict: false }
 );
 
 export default model('Item', itemSchema);

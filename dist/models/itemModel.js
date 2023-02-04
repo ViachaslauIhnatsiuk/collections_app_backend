@@ -19,6 +19,7 @@ const itemSchema = new mongoose_1.Schema({
         type: String,
         required: true,
     },
+    likes: [String],
     comments: [commentSchema],
 }, { versionKey: false, strict: false });
 exports.default = (0, mongoose_1.model)('Item', itemSchema);

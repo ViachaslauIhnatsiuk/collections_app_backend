@@ -20,6 +20,7 @@ const itemSchema = new Schema(
       type: String,
       required: true,
     },
+    likes: [String],
     comments: [commentSchema],
   },
   { versionKey: false, strict: false }

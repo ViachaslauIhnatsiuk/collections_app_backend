@@ -1,5 +1,7 @@
 import { Schema, model } from 'mongoose';
 
+const itemExtraFieldsSchema = new Schema({ name: String, type: String });
+
 const itemsCollectionSchema = new Schema(
   {
     title: {
@@ -18,6 +20,7 @@ const itemsCollectionSchema = new Schema(
       type: String,
       required: true,
     },
+    itemExtraFields: [itemExtraFieldsSchema],
   },
   { versionKey: false }
 );

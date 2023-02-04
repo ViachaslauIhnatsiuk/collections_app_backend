@@ -8,6 +8,7 @@ const createCollection = async (request: Request, response: Response) => {
     'description',
     'topic',
     'ownerId',
+    'itemExtraFields',
   ]);
 
   if (bodyRequestError) {
@@ -16,7 +17,7 @@ const createCollection = async (request: Request, response: Response) => {
       .send(createError(400, 'bad request: ' + bodyRequestError));
   }
 
-  const { title, description, topic, ownerId } = request.body;
+  const { title, description, topic, ownerId, itemExtraFields } = request.body;
 
   try {
     const newCollection = await collectionService.createCollection({
@@ -24,6 +25,7 @@ const createCollection = async (request: Request, response: Response) => {
       description,
       topic,
       ownerId,
+      itemExtraFields,
     });
 
     response.json(newCollection);
@@ -59,7 +61,6 @@ const updateCollection = async (request: Request, response: Response) => {
     'title',
     'description',
     'topic',
-    'ownerId',
   ]);
 
   if (bodyRequestError) {
@@ -68,12 +69,12 @@ const updateCollection = async (request: Request, response: Response) => {
       .send(createError(400, 'bad request: ' + bodyRequestError));
   }
 
-  const { title, description, topic, ownerId } = request.body;
+  const { title, description, topic } = request.body;
 
   try {
     const updatedCollection = await collectionService.updateCollection(
       request.params['collectionId'],
-      { title, description, topic, ownerId }
+      { title, description, topic }
     );
 
     response.json(updatedCollection);

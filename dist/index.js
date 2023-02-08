@@ -21,11 +21,26 @@ const auth_1 = require("./routes/auth");
 const collections_1 = require("./routes/collections");
 const items_1 = require("./routes/items");
 const users_1 = require("./routes/users");
+const socket_io_1 = require("socket.io");
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 const server = http_1.default.createServer(app);
 app.use(express_1.default.json());
 app.use((0, cors_1.default)());
+const io = new socket_io_1.Server(server, {
+    cors: {
+        origin: '*',
+    },
+});
+io.on('connection', (socket) => {
+    console.log(`User conntected: ${socket.id}`);
+    socket.on('send_comment', (data) => {
+        socket.broadcast.emit('recieve_comment', data);
+    });
+    socket.on('disconnect', () => {
+        console.log('Disconnected');
+    });
+});
 app.use('/', auth_1.authRoutes);
 app.use('/collections', collections_1.collectionsRouter);
 app.use('/items', items_1.itemsRouter);

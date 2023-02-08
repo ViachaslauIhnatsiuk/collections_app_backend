@@ -7,6 +7,7 @@ import { authRoutes } from './routes/auth';
 import { collectionsRouter } from './routes/collections';
 import { itemsRouter } from './routes/items';
 import { usersRouter } from './routes/users';
+import { Socket, Server } from 'socket.io';
 
 dotenv.config();
 const app = express();
@@ -14,6 +15,24 @@ const server = http.createServer(app);
 
 app.use(express.json());
 app.use(cors());
+
+const io = new Server(server, {
+  cors: {
+    origin: '*',
+  },
+});
+
+io.on('connection', (socket: Socket) => {
+  console.log(`User conntected: ${socket.id}`);
+
+  socket.on('send_comment', (data) => {
+    socket.broadcast.emit('recieve_comment', data);
+  });
+
+  socket.on('disconnect', () => {
+    console.log('Disconnected');
+  });
+});
 
 app.use('/', authRoutes);
 app.use('/collections', collectionsRouter);

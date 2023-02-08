@@ -16,6 +16,7 @@ const itemsCollectionSchema = new Schema(
       type: String,
       required: true,
     },
+    imageUrl: String,
     ownerId: {
       type: String,
       required: true,

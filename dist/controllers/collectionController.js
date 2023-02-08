@@ -40,6 +40,7 @@ const createCollection = (request, response) => __awaiter(void 0, void 0, void 0
         'title',
         'description',
         'topic',
+        'imageUrl',
         'ownerId',
         'itemExtraFields',
     ]);
@@ -48,12 +49,13 @@ const createCollection = (request, response) => __awaiter(void 0, void 0, void 0
             .status(400)
             .send((0, errorService_1.createError)(400, 'bad request: ' + bodyRequestError));
     }
-    const { title, description, topic, ownerId, itemExtraFields } = request.body;
+    const { title, description, topic, imageUrl, ownerId, itemExtraFields } = request.body;
     try {
         const newCollection = yield collectionService.createCollection({
             title,
             description,
             topic,
+            imageUrl,
             ownerId,
             itemExtraFields,
         });
@@ -89,15 +91,16 @@ const updateCollection = (request, response) => __awaiter(void 0, void 0, void 0
         'title',
         'description',
         'topic',
+        'imageUrl',
     ]);
     if (bodyRequestError) {
         return response
             .status(400)
             .send((0, errorService_1.createError)(400, 'bad request: ' + bodyRequestError));
     }
-    const { title, description, topic } = request.body;
+    const { title, description, topic, imageUrl } = request.body;
     try {
-        const updatedCollection = yield collectionService.updateCollection(request.params['collectionId'], { title, description, topic });
+        const updatedCollection = yield collectionService.updateCollection(request.params['collectionId'], { title, description, topic, imageUrl });
         response.json(updatedCollection);
     }
     catch (error) {

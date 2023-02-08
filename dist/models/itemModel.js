@@ -21,6 +21,6 @@ const itemSchema = new mongoose_1.Schema({
     },
     likes: [String],
     comments: [commentSchema],
-}, { versionKey: false, strict: false });
+}, { timestamps: true, versionKey: false, strict: false });
 exports.default = (0, mongoose_1.model)('Item', itemSchema);
 //# sourceMappingURL=itemModel.js.map

@@ -23,7 +23,7 @@ const itemSchema = new Schema(
     likes: [String],
     comments: [commentSchema],
   },
-  { versionKey: false, strict: false }
+  { timestamps: true, versionKey: false, strict: false }
 );
 
 export default model('Item', itemSchema);

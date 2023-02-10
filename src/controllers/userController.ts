@@ -2,6 +2,16 @@ import { Response, Request } from 'express';
 import * as userService from '../services/userService';
 import { createError, checkRequestBody } from '../services/errorService';
 
+interface IUser {
+  _id: string;
+  name: string;
+  email: string;
+  isBlocked: boolean;
+  isAdmin: boolean;
+  language: string;
+  theme: string;
+}
+
 const getUsers = async (request: Request, response: Response) => {
   const ids = request.query.ids as string[];
   const users = await userService.findUsers();
@@ -11,7 +21,16 @@ const getUsers = async (request: Request, response: Response) => {
   }
 
   try {
-    response.json(users);
+    const responseUsers = users.map((user: IUser) => ({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      isBlocked: user.isBlocked,
+      isAdmin: user.isAdmin,
+      language: user.language,
+      theme: user.theme,
+    }));
+    response.json(responseUsers);
   } catch (error) {
     console.log(error);
   }

@@ -42,7 +42,16 @@ const getUsers = (request, response) => __awaiter(void 0, void 0, void 0, functi
         return response.json(users.filter((user) => ids.includes(user._id)));
     }
     try {
-        response.json(users);
+        const responseUsers = users.map((user) => ({
+            _id: user._id,
+            name: user.name,
+            email: user.email,
+            isBlocked: user.isBlocked,
+            isAdmin: user.isAdmin,
+            language: user.language,
+            theme: user.theme,
+        }));
+        response.json(responseUsers);
     }
     catch (error) {
         console.log(error);

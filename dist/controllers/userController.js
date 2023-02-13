@@ -38,19 +38,19 @@ const errorService_1 = require("../services/errorService");
 const getUsers = (request, response) => __awaiter(void 0, void 0, void 0, function* () {
     const ids = request.query.ids;
     const users = yield userService.findUsers();
+    const responseUsers = users.map((user) => ({
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        isBlocked: user.isBlocked,
+        isAdmin: user.isAdmin,
+        language: user.language,
+        theme: user.theme,
+    }));
     if (ids) {
-        return response.json(users.filter((user) => ids.includes(user._id)));
+        return response.json(responseUsers.filter((user) => ids.includes(user.id)));
     }
     try {
-        const responseUsers = users.map((user) => ({
-            _id: user._id,
-            name: user.name,
-            email: user.email,
-            isBlocked: user.isBlocked,
-            isAdmin: user.isAdmin,
-            language: user.language,
-            theme: user.theme,
-        }));
         response.json(responseUsers);
     }
     catch (error) {
@@ -61,7 +61,16 @@ exports.getUsers = getUsers;
 const getUserById = (request, response) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const user = yield userService.findUserById(request.params['id']);
-        response.json(user);
+        const responseUser = {
+            id: user._id,
+            name: user.name,
+            email: user.email,
+            isBlocked: user.isBlocked,
+            isAdmin: user.isAdmin,
+            language: user.language,
+            theme: user.theme,
+        };
+        response.json(responseUser);
     }
     catch (error) {
         return response.status(404).send((0, errorService_1.createError)(404, 'User not found!'));

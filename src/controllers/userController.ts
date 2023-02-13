@@ -16,20 +16,23 @@ const getUsers = async (request: Request, response: Response) => {
   const ids = request.query.ids as string[];
   const users = await userService.findUsers();
 
+  const responseUsers = users.map((user: IUser) => ({
+    id: user._id,
+    name: user.name,
+    email: user.email,
+    isBlocked: user.isBlocked,
+    isAdmin: user.isAdmin,
+    language: user.language,
+    theme: user.theme,
+  }));
+
   if (ids) {
-    return response.json(users.filter((user: { _id: string }) => ids.includes(user._id)));
+    return response.json(
+      responseUsers.filter((user: { id: string }) => ids.includes(user.id))
+    );
   }
 
   try {
-    const responseUsers = users.map((user: IUser) => ({
-      _id: user._id,
-      name: user.name,
-      email: user.email,
-      isBlocked: user.isBlocked,
-      isAdmin: user.isAdmin,
-      language: user.language,
-      theme: user.theme,
-    }));
     response.json(responseUsers);
   } catch (error) {
     console.log(error);
@@ -40,7 +43,17 @@ const getUserById = async (request: Request, response: Response) => {
   try {
     const user = await userService.findUserById(request.params['id']);
 
-    response.json(user);
+    const responseUser = {
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      isBlocked: user.isBlocked,
+      isAdmin: user.isAdmin,
+      language: user.language,
+      theme: user.theme,
+    };
+
+    response.json(responseUser);
   } catch (error) {
     return response.status(404).send(createError(404, 'User not found!'));
   }

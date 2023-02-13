@@ -1,6 +1,7 @@
 import { Response, Request } from 'express';
 import * as itemService from '../services/itemService';
 import { createError } from '../services/errorService';
+import Item from '../models/itemModel';
 
 const createItem = async (request: Request, response: Response) => {
   try {
@@ -15,15 +16,42 @@ const createItem = async (request: Request, response: Response) => {
 };
 
 const getItems = async (request: Request, response: Response) => {
-  const itemId = request.baseUrl.split('/')[2];
+  const { search } = request.query;
+  let items;
 
-  try {
-    const items = await itemService.findItems({ itemId });
-
-    response.json(items);
-  } catch (error) {
-    console.log(error);
+  if (search) {
+    items = await Item.aggregate([
+      {
+        $search: {
+          index: 'items',
+          compound: {
+            should: [
+              {
+                autocomplete: {
+                  query: search,
+                  path: 'title',
+                },
+              },
+              {
+                autocomplete: {
+                  query: search,
+                  path: 'tags',
+                },
+              },
+            ],
+          },
+        },
+      },
+      {
+        $limit: 5,
+      },
+    ]);
+  } else {
+    const itemId = request.baseUrl.split('/')[2];
+    items = await itemService.findItems({ itemId });
   }
+
+  return response.json(items);
 };
 
 const getItemById = async (request: Request, response: Response) => {

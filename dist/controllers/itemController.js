@@ -31,10 +31,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteItem = exports.updateItem = exports.getItemById = exports.getItems = exports.createItem = void 0;
 const itemService = __importStar(require("../services/itemService"));
 const errorService_1 = require("../services/errorService");
+const itemModel_1 = __importDefault(require("../models/itemModel"));
 const createItem = (request, response) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const newItem = yield itemService.createItem(Object.assign({}, request.body));
@@ -46,14 +50,41 @@ const createItem = (request, response) => __awaiter(void 0, void 0, void 0, func
 });
 exports.createItem = createItem;
 const getItems = (request, response) => __awaiter(void 0, void 0, void 0, function* () {
-    const itemId = request.baseUrl.split('/')[2];
-    try {
-        const items = yield itemService.findItems({ itemId });
-        response.json(items);
+    const { search } = request.query;
+    let items;
+    if (search) {
+        items = yield itemModel_1.default.aggregate([
+            {
+                $search: {
+                    index: 'items',
+                    compound: {
+                        should: [
+                            {
+                                autocomplete: {
+                                    query: search,
+                                    path: 'title',
+                                },
+                            },
+                            {
+                                autocomplete: {
+                                    query: search,
+                                    path: 'tags',
+                                },
+                            },
+                        ],
+                    },
+                },
+            },
+            {
+                $limit: 5,
+            },
+        ]);
     }
-    catch (error) {
-        console.log(error);
+    else {
+        const itemId = request.baseUrl.split('/')[2];
+        items = yield itemService.findItems({ itemId });
     }
+    return response.json(items);
 });
 exports.getItems = getItems;
 const getItemById = (request, response) => __awaiter(void 0, void 0, void 0, function* () {

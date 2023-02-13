@@ -79,26 +79,13 @@ const getUserById = (request, response) => __awaiter(void 0, void 0, void 0, fun
 exports.getUserById = getUserById;
 const updateUser = (request, response) => __awaiter(void 0, void 0, void 0, function* () {
     const id = request.params['id'];
-    const bodyRequestError = (0, errorService_1.checkRequestBody)(request.body, [
-        'name',
-        'email',
-        'password',
-        'isBlocked',
-        'isAdmin',
-        'language',
-        'theme',
-    ]);
-    if (bodyRequestError) {
-        return response
-            .status(400)
-            .send((0, errorService_1.createError)(400, 'bad request: ' + bodyRequestError));
-    }
-    const { name, email, password, isBlocked, isAdmin, language, theme } = request.body;
+    const user = yield userService.findUserById(id);
+    const { name, email, isBlocked, password, isAdmin, language, theme } = request.body;
     try {
         const updatedUser = yield userService.updateUserById(id, {
             name,
             email,
-            password,
+            password: password || user.password,
             isBlocked,
             isAdmin,
             language,

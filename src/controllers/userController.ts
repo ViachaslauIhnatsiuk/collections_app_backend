@@ -1,6 +1,6 @@
 import { Response, Request } from 'express';
 import * as userService from '../services/userService';
-import { createError, checkRequestBody } from '../services/errorService';
+import { createError } from '../services/errorService';
 
 interface IUser {
   _id: string;
@@ -61,28 +61,15 @@ const getUserById = async (request: Request, response: Response) => {
 
 const updateUser = async (request: Request, response: Response) => {
   const id = request.params['id'];
+  const user = await userService.findUserById(id);
 
-  const bodyRequestError = checkRequestBody(request.body, [
-    'name',
-    'email',
-    'password',
-    'isBlocked',
-    'isAdmin',
-    'language',
-    'theme',
-  ]);
-  if (bodyRequestError) {
-    return response
-      .status(400)
-      .send(createError(400, 'bad request: ' + bodyRequestError));
-  }
-  const { name, email, password, isBlocked, isAdmin, language, theme } = request.body;
+  const { name, email, isBlocked, password, isAdmin, language, theme } = request.body;
 
   try {
     const updatedUser = await userService.updateUserById(id, {
       name,
       email,
-      password,
+      password: password || user.password,
       isBlocked,
       isAdmin,
       language,

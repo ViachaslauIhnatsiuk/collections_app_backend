@@ -24,26 +24,12 @@ const getItems = async (request: Request, response: Response) => {
       {
         $search: {
           index: 'items',
-          compound: {
-            should: [
-              {
-                autocomplete: {
-                  query: search,
-                  path: 'title',
-                },
-              },
-              {
-                autocomplete: {
-                  query: search,
-                  path: 'tags',
-                },
-              },
-            ],
+          text: {
+            query: search,
+            path: { wildcard: '*' },
+            fuzzy: {},
           },
         },
-      },
-      {
-        $limit: 5,
       },
     ]);
   } else {

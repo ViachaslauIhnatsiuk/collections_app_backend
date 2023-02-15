@@ -57,26 +57,12 @@ const getItems = (request, response) => __awaiter(void 0, void 0, void 0, functi
             {
                 $search: {
                     index: 'items',
-                    compound: {
-                        should: [
-                            {
-                                autocomplete: {
-                                    query: search,
-                                    path: 'title',
-                                },
-                            },
-                            {
-                                autocomplete: {
-                                    query: search,
-                                    path: 'tags',
-                                },
-                            },
-                        ],
+                    text: {
+                        query: search,
+                        path: { wildcard: '*' },
+                        fuzzy: {},
                     },
                 },
-            },
-            {
-                $limit: 5,
             },
         ]);
     }

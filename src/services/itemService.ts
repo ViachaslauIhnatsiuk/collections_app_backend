@@ -35,6 +35,12 @@ const deleteItemById = async (itemId: string) => {
   return deletedItem;
 };
 
+const deleteItemsByIds = async (itemIds: ObjectId[]) => {
+  const deletedItems = await Item.deleteMany({ _id: { $in: itemIds } });
+
+  return deletedItems;
+};
+
 export {
   createItem,
   findItemById,
@@ -42,4 +48,5 @@ export {
   findItemsByUser,
   updateItem,
   deleteItemById,
+  deleteItemsByIds,
 };

@@ -12,8 +12,8 @@ const findCollectionById = (id: string) => {
   return ItemCollection.findById(new ObjectId(id));
 };
 
-const findCollections = () => {
-  return ItemCollection.find({});
+const findCollections = (data: any) => {
+  return ItemCollection.find(data);
 };
 
 const findCollectionsByUser = async (userId: string) => {
@@ -38,6 +38,14 @@ const deleteCollectionById = async (collectionId: string) => {
   return deletedCollection;
 };
 
+const deleteCollectionsByIds = async (collectionIds: ObjectId[]) => {
+  const deletedCollections = await ItemCollection.deleteMany({
+    _id: { $in: collectionIds },
+  });
+
+  return deletedCollections;
+};
+
 export {
   createCollection,
   findCollectionById,
@@ -45,4 +53,5 @@ export {
   findCollectionsByUser,
   updateCollection,
   deleteCollectionById,
+  deleteCollectionsByIds,
 };

@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteItemById = exports.updateItem = exports.findItemsByUser = exports.findItems = exports.findItemById = exports.createItem = void 0;
+exports.deleteItemsByIds = exports.deleteItemById = exports.updateItem = exports.findItemsByUser = exports.findItems = exports.findItemById = exports.createItem = void 0;
 const itemModel_1 = __importDefault(require("../models/itemModel"));
 const mongodb_1 = require("mongodb");
 const createItem = (data) => __awaiter(void 0, void 0, void 0, function* () {
@@ -46,4 +46,9 @@ const deleteItemById = (itemId) => __awaiter(void 0, void 0, void 0, function* (
     return deletedItem;
 });
 exports.deleteItemById = deleteItemById;
+const deleteItemsByIds = (itemIds) => __awaiter(void 0, void 0, void 0, function* () {
+    const deletedItems = yield itemModel_1.default.deleteMany({ _id: { $in: itemIds } });
+    return deletedItems;
+});
+exports.deleteItemsByIds = deleteItemsByIds;
 //# sourceMappingURL=itemService.js.map

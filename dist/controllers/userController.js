@@ -33,7 +33,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteUser = exports.updateUser = exports.getUserById = exports.getUsers = void 0;
+const mongodb_1 = require("mongodb");
 const userService = __importStar(require("../services/userService"));
+const collectionService = __importStar(require("../services/collectionService"));
+const itemService = __importStar(require("../services/itemService"));
 const errorService_1 = require("../services/errorService");
 const getUsers = (request, response) => __awaiter(void 0, void 0, void 0, function* () {
     const ids = request.query.ids;
@@ -100,8 +103,19 @@ const updateUser = (request, response) => __awaiter(void 0, void 0, void 0, func
 exports.updateUser = updateUser;
 const deleteUser = (request, response) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const deletedUser = yield userService.deleteUserById(request.params.id);
-        response.json(deletedUser);
+        const userId = request.params.id;
+        const deletedUser = yield userService.deleteUserById(userId);
+        const userCollections = yield collectionService.findCollections({
+            ownerId: { $in: [new mongodb_1.ObjectId(userId)] },
+        });
+        const userItems = yield itemService.findItems({
+            ownerId: { $in: [new mongodb_1.ObjectId(userId)] },
+        });
+        const userCollectionsIds = userCollections.map(({ _id }) => _id);
+        const userItemsIds = userItems.map(({ _id }) => _id);
+        const deletedCollections = yield collectionService.deleteCollectionsByIds(userCollectionsIds);
+        const deletedItems = yield itemService.deleteItemsByIds(userItemsIds);
+        response.json([deletedUser, deletedCollections, deletedItems]);
     }
     catch (error) {
         console.log(error);

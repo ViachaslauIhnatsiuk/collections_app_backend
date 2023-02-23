@@ -1,5 +1,7 @@
 import { Response, Request } from 'express';
+import { ObjectId } from 'mongodb';
 import * as collectionService from '../services/collectionService';
+import * as itemService from '../services/itemService';
 import { createError, checkRequestBody } from '../services/errorService';
 
 const createCollection = async (request: Request, response: Response) => {
@@ -38,7 +40,7 @@ const createCollection = async (request: Request, response: Response) => {
 
 const getCollections = async (_: Request, response: Response) => {
   try {
-    const collections = await collectionService.findCollections();
+    const collections = await collectionService.findCollections({});
 
     response.json(collections);
   } catch (error) {
@@ -88,10 +90,16 @@ const updateCollection = async (request: Request, response: Response) => {
 
 const deleteCollection = async (request: Request, response: Response) => {
   try {
-    const deletedCollection = await collectionService.deleteCollectionById(
-      request.params['collectionId']
-    );
-    response.json(deletedCollection);
+    const collectionId = request.params['collectionId'];
+    const deletedCollection = await collectionService.deleteCollectionById(collectionId);
+
+    const itemsFromCollection = await itemService.findItems({
+      collectionId: { $in: [new ObjectId(collectionId)] },
+    });
+    const itemsIds = itemsFromCollection.map(({ _id }) => _id);
+    const deletedItems = await itemService.deleteItemsByIds(itemsIds);
+
+    response.json([deletedCollection, deletedItems]);
   } catch (error) {
     console.log(error);
   }

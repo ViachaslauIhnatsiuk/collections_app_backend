@@ -1,5 +1,8 @@
 import { Response, Request } from 'express';
+import { ObjectId } from 'mongodb';
 import * as userService from '../services/userService';
+import * as collectionService from '../services/collectionService';
+import * as itemService from '../services/itemService';
 import { createError } from '../services/errorService';
 
 interface IUser {
@@ -84,9 +87,25 @@ const updateUser = async (request: Request, response: Response) => {
 
 const deleteUser = async (request: Request, response: Response) => {
   try {
-    const deletedUser = await userService.deleteUserById(request.params.id);
+    const userId = request.params.id;
+    const deletedUser = await userService.deleteUserById(userId);
 
-    response.json(deletedUser);
+    const userCollections = await collectionService.findCollections({
+      ownerId: { $in: [new ObjectId(userId)] },
+    });
+    const userItems = await itemService.findItems({
+      ownerId: { $in: [new ObjectId(userId)] },
+    });
+
+    const userCollectionsIds = userCollections.map(({ _id }) => _id);
+    const userItemsIds = userItems.map(({ _id }) => _id);
+
+    const deletedCollections = await collectionService.deleteCollectionsByIds(
+      userCollectionsIds
+    );
+    const deletedItems = await itemService.deleteItemsByIds(userItemsIds);
+
+    response.json([deletedUser, deletedCollections, deletedItems]);
   } catch (error) {
     console.log(error);
   }

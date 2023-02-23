@@ -33,7 +33,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteCollection = exports.updateCollection = exports.getCollectionById = exports.getCollections = exports.createCollection = void 0;
+const mongodb_1 = require("mongodb");
 const collectionService = __importStar(require("../services/collectionService"));
+const itemService = __importStar(require("../services/itemService"));
 const errorService_1 = require("../services/errorService");
 const createCollection = (request, response) => __awaiter(void 0, void 0, void 0, function* () {
     const bodyRequestError = (0, errorService_1.checkRequestBody)(request.body, [
@@ -68,7 +70,7 @@ const createCollection = (request, response) => __awaiter(void 0, void 0, void 0
 exports.createCollection = createCollection;
 const getCollections = (_, response) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const collections = yield collectionService.findCollections();
+        const collections = yield collectionService.findCollections({});
         response.json(collections);
     }
     catch (error) {
@@ -110,8 +112,14 @@ const updateCollection = (request, response) => __awaiter(void 0, void 0, void 0
 exports.updateCollection = updateCollection;
 const deleteCollection = (request, response) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const deletedCollection = yield collectionService.deleteCollectionById(request.params['collectionId']);
-        response.json(deletedCollection);
+        const collectionId = request.params['collectionId'];
+        const deletedCollection = yield collectionService.deleteCollectionById(collectionId);
+        const itemsFromCollection = yield itemService.findItems({
+            collectionId: { $in: [new mongodb_1.ObjectId(collectionId)] },
+        });
+        const itemsIds = itemsFromCollection.map(({ _id }) => _id);
+        const deletedItems = yield itemService.deleteItemsByIds(itemsIds);
+        response.json([deletedCollection, deletedItems]);
     }
     catch (error) {
         console.log(error);

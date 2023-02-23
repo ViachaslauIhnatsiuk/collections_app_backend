@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteCollectionById = exports.updateCollection = exports.findCollectionsByUser = exports.findCollections = exports.findCollectionById = exports.createCollection = void 0;
+exports.deleteCollectionsByIds = exports.deleteCollectionById = exports.updateCollection = exports.findCollectionsByUser = exports.findCollections = exports.findCollectionById = exports.createCollection = void 0;
 const collectionModel_1 = __importDefault(require("../models/collectionModel"));
 const mongodb_1 = require("mongodb");
 const createCollection = (data) => __awaiter(void 0, void 0, void 0, function* () {
@@ -25,8 +25,8 @@ const findCollectionById = (id) => {
     return collectionModel_1.default.findById(new mongodb_1.ObjectId(id));
 };
 exports.findCollectionById = findCollectionById;
-const findCollections = () => {
-    return collectionModel_1.default.find({});
+const findCollections = (data) => {
+    return collectionModel_1.default.find(data);
 };
 exports.findCollections = findCollections;
 const findCollectionsByUser = (userId) => __awaiter(void 0, void 0, void 0, function* () {
@@ -48,4 +48,11 @@ const deleteCollectionById = (collectionId) => __awaiter(void 0, void 0, void 0,
     return deletedCollection;
 });
 exports.deleteCollectionById = deleteCollectionById;
+const deleteCollectionsByIds = (collectionIds) => __awaiter(void 0, void 0, void 0, function* () {
+    const deletedCollections = yield collectionModel_1.default.deleteMany({
+        _id: { $in: collectionIds },
+    });
+    return deletedCollections;
+});
+exports.deleteCollectionsByIds = deleteCollectionsByIds;
 //# sourceMappingURL=collectionService.js.map

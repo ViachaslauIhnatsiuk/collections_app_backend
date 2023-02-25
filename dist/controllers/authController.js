@@ -24,7 +24,7 @@ const signUp = (request, response) => __awaiter(void 0, void 0, void 0, function
         const user = yield User.signup(name, email, password);
         const token = createToken(user._id);
         const responseUser = {
-            id: user._id,
+            _id: user._id,
             token,
             name,
             email,
@@ -46,7 +46,7 @@ const signIn = (request, response) => __awaiter(void 0, void 0, void 0, function
         const user = yield User.signin(email, password);
         const token = createToken(user._id);
         const responseUser = {
-            id: user._id,
+            _id: user._id,
             token,
             name: user.name,
             email,

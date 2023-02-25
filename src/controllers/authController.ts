@@ -14,7 +14,7 @@ const signUp = async (request: Request, response: Response): Promise<void> => {
     const token = createToken(user._id);
 
     const responseUser = {
-      id: user._id,
+      _id: user._id,
       token,
       name,
       email,
@@ -38,7 +38,7 @@ const signIn = async (request: Request, response: Response): Promise<void> => {
     const token = createToken(user._id);
 
     const responseUser = {
-      id: user._id,
+      _id: user._id,
       token,
       name: user.name,
       email,

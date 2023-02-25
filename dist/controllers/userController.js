@@ -42,7 +42,7 @@ const getUsers = (request, response) => __awaiter(void 0, void 0, void 0, functi
     const ids = request.query.ids;
     const users = yield userService.findUsers();
     const responseUsers = users.map((user) => ({
-        id: user._id,
+        _id: user._id,
         name: user.name,
         email: user.email,
         isBlocked: user.isBlocked,
@@ -51,7 +51,7 @@ const getUsers = (request, response) => __awaiter(void 0, void 0, void 0, functi
         theme: user.theme,
     }));
     if (ids) {
-        return response.json(responseUsers.filter((user) => ids.includes(user.id)));
+        return response.json(responseUsers.filter((user) => ids.includes(user._id)));
     }
     try {
         response.json(responseUsers);
@@ -65,7 +65,7 @@ const getUserById = (request, response) => __awaiter(void 0, void 0, void 0, fun
     try {
         const user = yield userService.findUserById(request.params['id']);
         const responseUser = {
-            id: user._id,
+            _id: user._id,
             name: user.name,
             email: user.email,
             isBlocked: user.isBlocked,

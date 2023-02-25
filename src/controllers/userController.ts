@@ -4,23 +4,14 @@ import * as userService from '../services/userService';
 import * as collectionService from '../services/collectionService';
 import * as itemService from '../services/itemService';
 import { createError } from '../services/errorService';
-
-interface IUser {
-  _id: string;
-  name: string;
-  email: string;
-  isBlocked: boolean;
-  isAdmin: boolean;
-  language: string;
-  theme: string;
-}
+import { IUser } from 'user';
 
 const getUsers = async (request: Request, response: Response) => {
   const ids = request.query.ids as string[];
   const users = await userService.findUsers();
 
   const responseUsers = users.map((user: IUser) => ({
-    id: user._id,
+    _id: user._id,
     name: user.name,
     email: user.email,
     isBlocked: user.isBlocked,
@@ -31,7 +22,7 @@ const getUsers = async (request: Request, response: Response) => {
 
   if (ids) {
     return response.json(
-      responseUsers.filter((user: { id: string }) => ids.includes(user.id))
+      responseUsers.filter((user: { _id: string }) => ids.includes(user._id))
     );
   }
 
@@ -47,7 +38,7 @@ const getUserById = async (request: Request, response: Response) => {
     const user = await userService.findUserById(request.params['id']);
 
     const responseUser = {
-      id: user._id,
+      _id: user._id,
       name: user.name,
       email: user.email,
       isBlocked: user.isBlocked,

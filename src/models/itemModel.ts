@@ -1,6 +1,6 @@
 import { Schema, model } from 'mongoose';
 
-const commentSchema = new Schema({ user: String, text: String }, { timestamps: true });
+const commentSchema = new Schema({ user: String, text: String, createdAt: Number });
 
 const itemSchema = new Schema(
   {

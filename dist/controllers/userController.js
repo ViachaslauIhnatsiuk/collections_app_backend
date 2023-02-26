@@ -47,8 +47,6 @@ const getUsers = (request, response) => __awaiter(void 0, void 0, void 0, functi
         email: user.email,
         isBlocked: user.isBlocked,
         isAdmin: user.isAdmin,
-        language: user.language,
-        theme: user.theme,
     }));
     if (ids) {
         return response.json(responseUsers.filter((user) => ids.includes(user._id)));
@@ -70,8 +68,6 @@ const getUserById = (request, response) => __awaiter(void 0, void 0, void 0, fun
             email: user.email,
             isBlocked: user.isBlocked,
             isAdmin: user.isAdmin,
-            language: user.language,
-            theme: user.theme,
         };
         response.json(responseUser);
     }
@@ -83,7 +79,7 @@ exports.getUserById = getUserById;
 const updateUser = (request, response) => __awaiter(void 0, void 0, void 0, function* () {
     const id = request.params['id'];
     const user = yield userService.findUserById(id);
-    const { name, email, isBlocked, password, isAdmin, language, theme } = request.body;
+    const { name, email, isBlocked, password, isAdmin } = request.body;
     try {
         const updatedUser = yield userService.updateUserById(id, {
             name,
@@ -91,8 +87,6 @@ const updateUser = (request, response) => __awaiter(void 0, void 0, void 0, func
             password: password || user.password,
             isBlocked,
             isAdmin,
-            language,
-            theme,
         });
         response.json(updatedUser);
     }

@@ -19,8 +19,6 @@ const userSchema = new Schema(
     },
     isBlocked: Boolean,
     isAdmin: Boolean,
-    language: String,
-    theme: String,
   },
   { versionKey: false }
 );
@@ -30,9 +28,7 @@ userSchema.statics.signup = async function (
   email: string,
   password: string,
   isBlocked: boolean = false,
-  isAdmin: boolean = false,
-  language: string = 'EN',
-  theme: string = 'light'
+  isAdmin: boolean = false
 ) {
   if (!name || !email || !password) {
     throw Error('All fields must be filled');
@@ -57,8 +53,6 @@ userSchema.statics.signup = async function (
     password: hash,
     isBlocked,
     isAdmin,
-    language,
-    theme,
   });
 
   return user;

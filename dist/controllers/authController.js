@@ -30,8 +30,6 @@ const signUp = (request, response) => __awaiter(void 0, void 0, void 0, function
             email,
             isBlocked: user.isBlocked,
             isAdmin: user.isAdmin,
-            language: user.language,
-            theme: user.theme,
         };
         response.status(200).json(responseUser);
     }
@@ -52,8 +50,6 @@ const signIn = (request, response) => __awaiter(void 0, void 0, void 0, function
             email,
             isBlocked: user.isBlocked,
             isAdmin: user.isAdmin,
-            language: user.language,
-            theme: user.theme,
         };
         response.status(200).json(responseUser);
     }

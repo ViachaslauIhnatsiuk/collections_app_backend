@@ -31,10 +31,8 @@ const userSchema = new mongoose_1.Schema({
     },
     isBlocked: Boolean,
     isAdmin: Boolean,
-    language: String,
-    theme: String,
 }, { versionKey: false });
-userSchema.statics.signup = function (name, email, password, isBlocked = false, isAdmin = false, language = 'EN', theme = 'light') {
+userSchema.statics.signup = function (name, email, password, isBlocked = false, isAdmin = false) {
     return __awaiter(this, void 0, void 0, function* () {
         if (!name || !email || !password) {
             throw Error('All fields must be filled');
@@ -54,8 +52,6 @@ userSchema.statics.signup = function (name, email, password, isBlocked = false, 
             password: hash,
             isBlocked,
             isAdmin,
-            language,
-            theme,
         });
         return user;
     });

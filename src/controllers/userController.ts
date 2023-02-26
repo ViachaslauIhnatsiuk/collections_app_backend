@@ -16,8 +16,6 @@ const getUsers = async (request: Request, response: Response) => {
     email: user.email,
     isBlocked: user.isBlocked,
     isAdmin: user.isAdmin,
-    language: user.language,
-    theme: user.theme,
   }));
 
   if (ids) {
@@ -43,8 +41,6 @@ const getUserById = async (request: Request, response: Response) => {
       email: user.email,
       isBlocked: user.isBlocked,
       isAdmin: user.isAdmin,
-      language: user.language,
-      theme: user.theme,
     };
 
     response.json(responseUser);
@@ -57,7 +53,7 @@ const updateUser = async (request: Request, response: Response) => {
   const id = request.params['id'];
   const user = await userService.findUserById(id);
 
-  const { name, email, isBlocked, password, isAdmin, language, theme } = request.body;
+  const { name, email, isBlocked, password, isAdmin } = request.body;
 
   try {
     const updatedUser = await userService.updateUserById(id, {
@@ -66,8 +62,6 @@ const updateUser = async (request: Request, response: Response) => {
       password: password || user.password,
       isBlocked,
       isAdmin,
-      language,
-      theme,
     });
 
     response.json(updatedUser);

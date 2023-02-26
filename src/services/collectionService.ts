@@ -1,7 +1,8 @@
 import ItemCollection from '../models/collectionModel';
 import { ObjectId } from 'mongodb';
+import { ICollection, IUpdateCollection } from 'collection';
 
-const createCollection = async (data: any) => {
+const createCollection = async (data: ICollection) => {
   const newCollection = new ItemCollection(data);
   await newCollection.save();
 
@@ -12,7 +13,7 @@ const findCollectionById = (id: string) => {
   return ItemCollection.findById(new ObjectId(id));
 };
 
-const findCollections = (data: any) => {
+const findCollections = (data: object) => {
   return ItemCollection.find(data);
 };
 
@@ -21,7 +22,7 @@ const findCollectionsByUser = async (userId: string) => {
   return collections.filter((collection) => collection.ownerId === userId);
 };
 
-const updateCollection = async (id: string, data: any) => {
+const updateCollection = async (id: string, data: IUpdateCollection) => {
   const collectionId = new ObjectId(id);
 
   const updatedCollection = await ItemCollection.findByIdAndUpdate(collectionId, data, {

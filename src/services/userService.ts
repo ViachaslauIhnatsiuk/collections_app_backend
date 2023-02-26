@@ -1,5 +1,6 @@
 const User = require('../models/userModel');
 import { ObjectId } from 'mongodb';
+import { IUser } from 'user';
 
 const findUserById = (id: string) => {
   return User.findById(new ObjectId(id));
@@ -9,11 +10,11 @@ const findUsers = () => {
   return User.find({});
 };
 
-const findOneUser = (data: any) => {
+const findOneUser = (data: IUser) => {
   return User.findOne(data);
 };
 
-const updateUserById = async (id: string, data: any) => {
+const updateUserById = async (id: string, data: IUser) => {
   const userId = new ObjectId(id);
   const updatedUser = await User.findByIdAndUpdate(userId, data, { new: true });
 

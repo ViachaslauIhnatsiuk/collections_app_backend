@@ -1,7 +1,8 @@
 import Item from '../models/itemModel';
 import { ObjectId } from 'mongodb';
+import { IItem, IItemUpdate } from 'item';
 
-const createItem = async (data: any) => {
+const createItem = async (data: IItem) => {
   const newItem = new Item(data);
   await newItem.save();
 
@@ -21,7 +22,7 @@ const findItemsByUser = async (userId: string) => {
   return items.filter((item) => item.ownerId === userId);
 };
 
-const updateItem = async (id: string, data: any) => {
+const updateItem = async (id: string, data: IItemUpdate) => {
   const itemId = new ObjectId(id);
   const updatedItem = await Item.findByIdAndUpdate(itemId, data, { new: true });
 
